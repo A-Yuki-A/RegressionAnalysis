@@ -39,14 +39,14 @@ if uploaded_file is not None:
     st.markdown("""
     目的変数とは、分析の結果として「知りたい値」や「予測したい値」
        """)
-    y_col = st.selectbox("目的変数の選択。目的変数：分析の結果として「予測したい値」", numeric_cols, key="y_select")
+    y_col = st.selectbox("目的変数の選択　　目的変数：分析の結果として「予測したい値」", numeric_cols, key="y_select")
 
     # --- 説明変数の説明 ---
     x_candidates = [c for c in numeric_cols if c != y_col]
     if not x_candidates:
         st.error("説明変数にできる列がありません。別の目的変数を選んでください。")
         st.stop()
-    x_col = st.selectbox("説明変数の選択。説明変数：目的変数に影響を与えていそうな要因", x_candidates, key="x_select")
+    x_col = st.selectbox("説明変数の選択　　説明変数：目的変数に影響を与えていそうな要因", x_candidates, key="x_select")
 
     # 欠損を除去してから計算
     data = df[[x_col, y_col]].dropna()
