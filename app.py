@@ -10,16 +10,14 @@ st.title("🍦 アイス売上と各項目の関係を調べよう")
 
 # === フォント設定（OTF版・絶対パス指定） ===
 font_path = os.path.abspath(os.path.join("fonts", "SourceHanCodeJP-Regular.otf"))
-
 if os.path.exists(font_path):
     try:
         fm.fontManager.addfont(font_path)
         plt.rcParams["font.family"] = "Source Han Code JP"
-        st.success("✅ 日本語フォントを読み込みました。")
     except Exception as e:
         st.warning(f"⚠️ フォントの読み込みに失敗しました: {e}")
 else:
-    st.warning("⚠️ fontsフォルダに SourceHanCodeJP-Regular.otf が見つかりません。")
+    st.warning("⚠️ fonts フォルダに SourceHanCodeJP-Regular.otf が見つかりません。")
 
 # === ファイルアップロード ===
 uploaded_file = st.file_uploader("アイス売上データ（Excel）をアップロードしてください", type=["xlsx"])
@@ -52,7 +50,7 @@ if uploaded_file is not None:
     x = data[x_col].astype(float)
     y = data[y_col].astype(float)
 
-    # 回帰直線の計算
+    # 回帰直線の計算（一次）
     slope, intercept = np.polyfit(x, y, 1)
     y_pred = slope * x + intercept
 
@@ -69,9 +67,32 @@ if uploaded_file is not None:
     ax.legend()
     st.pyplot(fig)
 
-    # 結果の表示
+    # 数値の表示
     st.markdown(f"**回帰式：** y = {slope:.3f}x + {intercept:.3f}")
     st.markdown(f"**相関係数（r）：** {r:.3f}")
     st.markdown(f"**決定係数（R²）：** {r2:.3f}")
+
+    # ===== ここから 予測機能 =====
+    st.subheader("🔮 x の値から y を予測しよう")
+
+    xmin, xmax = float(np.nanmin(x)), float(np.nanmax(x))
+    # ステップはレンジの100分の1（極端に小さい場合は 0.1）
+    step = max((xmax - xmin) / 100.0, 0.1)
+
+    x_input = st.number_input(
+        f"予測したい {x_col}（x）の値を入力してください",
+        value=float(np.nanmedian(x)),
+        step=step
+    )
+
+    # 範囲外のとき注意喚起（外挿）
+    if x_input < xmin or x_input > xmax:
+        st.warning(
+            f"入力した x は学習データ範囲（{xmin:.3f} ～ {xmax:.3f}）外です。外挿になるため予測の信頼性は下がります。"
+        )
+
+    y_hat = slope * x_input + intercept
+    st.success(f"**予測された {y_col}（y）**： {y_hat:.3f}")
+
 else:
-    st.info("Excelファイルをアップロードすると、散布図が表示されます。")
+    st.info("Excelファイルをアップロードすると、散布図と回帰直線、指標、予測フォームが表示されます。")
