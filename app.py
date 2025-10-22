@@ -6,7 +6,7 @@ import matplotlib.font_manager as fm
 import os
 from pandas.api.types import is_numeric_dtype
 
-st.title("アイス売上と各項目の関係を調べよう")
+st.title("アイス売上の売り上げ予測")
 
 # === フォント設定（OTF版・絶対パス指定） ===
 font_path = os.path.abspath(os.path.join("fonts", "SourceHanCodeJP-Regular.otf"))
