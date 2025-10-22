@@ -25,7 +25,6 @@ if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
 
     st.subheader("データの中身")
-    # 高さと幅を指定してスクロール可能にする
     st.dataframe(df, height=500, use_container_width=True)
 
     # 「年」「月」だけを除外（例：最高気温月平均 は残す）
@@ -36,10 +35,20 @@ if uploaded_file is not None:
         st.error("数値データの列が見つかりません。Excelの列が数値として読み込まれているか確認してください。")
         st.stop()
 
-    # 目的変数（売上）
+    # --- 目的変数の説明 ---
+    st.markdown("""
+    **目的変数とは？**  
+    分析の結果として「知りたい値」や「予測したい値」のことです。  
+    ここでは「アイスの売上」などが目的変数になります。
+    """)
     y_col = st.selectbox("売上（目的変数）にする列を選んでください", numeric_cols, key="y_select")
 
-    # 説明変数（売上に影響しそうな項目）
+    # --- 説明変数の説明 ---
+    st.markdown("""
+    **説明変数とは？**  
+    目的変数に影響を与えていそうな要因のことです。  
+    たとえば「気温」や「湿度」など、売上に関係しそうな項目を選びます。
+    """)
     x_candidates = [c for c in numeric_cols if c != y_col]
     if not x_candidates:
         st.error("説明変数にできる列がありません。別の目的変数を選んでください。")
