@@ -7,7 +7,7 @@ import os
 from pandas.api.types import is_numeric_dtype
 
 st.title("アイス売上の売り上げ予測")
-
+st.set_page_config(page_title="アイス売上の売り上げ予測", layout="centered")
 # === フォント設定（OTF版・絶対パス指定） ===
 font_path = os.path.abspath(os.path.join("fonts", "SourceHanCodeJP-Regular.otf"))
 if os.path.exists(font_path):
