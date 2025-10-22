@@ -36,9 +36,6 @@ if uploaded_file is not None:
         st.stop()
 
     # --- 目的変数の説明 ---
-    st.markdown("""
-    目的変数とは、分析の結果として「知りたい値」や「予測したい値」
-       """)
     y_col = st.selectbox("**目的変数の選択**　　目的変数：分析の結果として「予測したい値」", numeric_cols, key="y_select")
 
     # --- 説明変数の説明 ---
